@@ -2,33 +2,137 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Ritmo Corsa</title>
+  <title>Calcolatore Ritmo Corsa</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .box {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px auto;
+      width: 300px;
+      border-radius: 10px;
+    }
+
+    input {
+      width: 80px;
+      padding: 5px;
+      margin: 5px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h1>Calcolatore Ritmo Corsa</h1>
+<h1>🏃 Calcolatore Ritmo Corsa</h1>
 
-  <input id="km" type="number" placeholder="Km">
-  <input id="min" type="number" placeholder="Minuti">
+<!-- ===================== -->
+<!-- 1. KM + TEMPO → RITMO -->
+<!-- ===================== -->
+<div class="box">
+  <h2>Km + Tempo → Ritmo</h2>
 
-  <button onclick="calcola()">Calcola</button>
+  <input id="km1" type="number" placeholder="Km">
 
-  <p id="out"></p>
+  <input id="h1" type="number" placeholder="Ore">
+  <input id="m1" type="number" placeholder="Min">
+  <input id="s1" type="number" placeholder="Sec">
 
-  <script>
-    function calcola() {
-      let km = document.getElementById("km").value;
-      let min = document.getElementById("min").value;
+  <br>
 
-      let ritmo = min / km;
+  <button onclick="calcolaRitmo()">Calcola ritmo</button>
 
-      let m = Math.floor(ritmo);
-      let s = Math.round((ritmo - m) * 60);
+  <p id="out1"></p>
+</div>
 
-      document.getElementById("out").innerText =
-        "Ritmo: " + m + ":" + (s < 10 ? "0" : "") + s + " min/km";
-    }
-  </script>
+<!-- ===================== -->
+<!-- 2. RITMO + KM → TEMPO -->
+<!-- ===================== -->
+<div class="box">
+  <h2>Ritmo + Km → Tempo</h2>
+
+  <input id="km2" type="number" placeholder="Km">
+
+  <input id="pm" type="number" placeholder="Min/km">
+  <input id="ps" type="number" placeholder="Sec/km">
+
+  <br>
+
+  <button onclick="calcolaTempo()">Calcola tempo</button>
+
+  <p id="out2"></p>
+</div>
+
+<script>
+
+// ======================
+// 1. TEMPO → RITMO
+// ======================
+function calcolaRitmo() {
+  let km = parseFloat(document.getElementById("km1").value);
+
+  let h = parseFloat(document.getElementById("h1").value) || 0;
+  let m = parseFloat(document.getElementById("m1").value) || 0;
+  let s = parseFloat(document.getElementById("s1").value) || 0;
+
+  let tempoTotale = (h * 3600 + m * 60 + s) / 60; // minuti
+
+  if (!km || km <= 0 || tempoTotale <= 0) {
+    document.getElementById("out1").innerText = "Inserisci valori validi";
+    return;
+  }
+
+  let ritmo = tempoTotale / km;
+
+  let min = Math.floor(ritmo);
+  let sec = Math.round((ritmo - min) * 60);
+
+  document.getElementById("out1").innerText =
+    "Ritmo: " + min + ":" + (sec < 10 ? "0" : "") + sec + " min/km";
+}
+
+
+// ======================
+// 2. RITMO → TEMPO
+// ======================
+function calcolaTempo() {
+  let km = parseFloat(document.getElementById("km2").value);
+
+  let minKm = parseFloat(document.getElementById("pm").value) || 0;
+  let secKm = parseFloat(document.getElementById("ps").value) || 0;
+
+  if (!km || km <= 0) {
+    document.getElementById("out2").innerText = "Inserisci km validi";
+    return;
+  }
+
+  let ritmoTotale = minKm * 60 + secKm; // secondi per km
+
+  let tempoTotaleSec = ritmoTotale * km;
+
+  let ore = Math.floor(tempoTotaleSec / 3600);
+  let min = Math.floor((tempoTotaleSec % 3600) / 60);
+  let sec = Math.round(tempoTotaleSec % 60);
+
+  document.getElementById("out2").innerText =
+    "Tempo: " + ore + "h " + min + "m " + sec + "s";
+}
+
+</script>
 
 </body>
 </html>
