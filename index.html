@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Ritmo Corsa</title>
+</head>
+<body>
+
+  <h1>Calcolatore Ritmo Corsa</h1>
+
+  <input id="km" type="number" placeholder="Km">
+  <input id="min" type="number" placeholder="Minuti">
+
+  <button onclick="calcola()">Calcola</button>
+
+  <p id="out"></p>
+
+  <script>
+    function calcola() {
+      let km = document.getElementById("km").value;
+      let min = document.getElementById("min").value;
+
+      let ritmo = min / km;
+
+      let m = Math.floor(ritmo);
+      let s = Math.round((ritmo - m) * 60);
+
+      document.getElementById("out").innerText =
+        "Ritmo: " + m + ":" + (s < 10 ? "0" : "") + s + " min/km";
+    }
+  </script>
+
+</body>
+</html>
